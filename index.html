@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Design - Móveis Planejados</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-ice-white: #F9F9F9;
+            --color-warm-beige: #CBB89D;
+            --color-soft-black: #2C2C2C;
+            --color-sage-green: #A3A380;
+            --color-pure-white: #FFFFFF;
+            --color-light-gray: #F5F5F5;
+            --color-border-light: #E8E8E8;
+            --color-border-accent: #D4C4A8;
+            --font-primary: 'Inter', sans-serif;
+            --font-display: 'Playfair Display', serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--color-ice-white);
+            color: var(--color-soft-black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes borderShimmer {
+            0%, 100% {
+                background-position: -200% 0;
+            }
+            50% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-pure-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--color-light-gray);
+            border-top: 2px solid var(--color-warm-beige);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Container */
+        .main-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--color-pure-white) 0%, var(--color-ice-white) 100%);
+            position: relative;
+        }
+
+        /* Background Element */
+        .bg-decoration {
+            display: none;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 600px;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--color-pure-white);
+            box-shadow: 0 20px 60px rgba(163, 163, 128, 0.15);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border: 1px solid rgba(203, 184, 157, 0.2);
+        }
+
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--color-warm-beige), var(--color-sage-green));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .logo-container:hover::before {
+            opacity: 1;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 30px 80px rgba(163, 163, 128, 0.25);
+        }
+
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hero Text */
+        .hero-section {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-display);
+            font-size: clamp(1.05rem, 2vw, 1.3rem);
+            font-weight: 400;
+            color: var(--color-sage-green);
+            line-height: 1.7;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            max-width: 520px;
+            margin: 0 auto;
+            letter-spacing: 0.01em;
+            font-style: italic;
+        }
+
+        /* NEW MINIMALIST ACTION BUTTONS */
+        .action-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 36px;
+            background: var(--color-pure-white);
+            color: var(--color-soft-black);
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 400;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            max-width: 320px;
+            width: 100%;
+            animation: slideInLeft 1s ease-out calc(0.7s + var(--delay, 0s)) both;
+            cursor: pointer;
+            border: 1px solid var(--color-border-light);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(203, 184, 157, 0.08);
+        }
+
+        /* Minimalist border effect - always visible */
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                var(--color-border-light),
+                var(--color-border-accent),
+                var(--color-warm-beige),
+                var(--color-sage-green),
+                var(--color-warm-beige),
+                var(--color-border-accent),
+                var(--color-border-light)
+            );
+            background-size: 200% 100%;
+            border-radius: 16px;
+            padding: 1px;
+            z-index: 0;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            animation: borderShimmer 4s ease-in-out infinite;
+        }
+
+        .action-button::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: var(--color-pure-white);
+            border-radius: 15px;
+            z-index: 0;
+        }
+
+        .action-button:hover::before {
+            opacity: 1;
+            animation: borderShimmer 1.5s ease-in-out infinite;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 32px rgba(203, 184, 157, 0.15),
+                0 2px 8px rgba(163, 163, 128, 0.1);
+            border-color: var(--color-border-accent);
+        }
+
+        .action-button span,
+        .action-button .icon {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover span {
+            color: var(--color-soft-black);
+            font-weight: 500;
+        }
+
+        .action-button:nth-child(1) { --delay: 0s; }
+        .action-button:nth-child(2) { --delay: 0.1s; }
+        .action-button:nth-child(3) { --delay: 0.2s; }
+
+        /* Subtle icon animations */
+        .action-button:hover .icon {
+            transform: scale(1.1);
+        }
+
+        /* Icon Styles - More minimalist */
+        .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .icon-whatsapp {
+            fill: #25D366;
+        }
+
+        .action-button:hover .icon-whatsapp {
+            fill: #25D366;
+            opacity: 1;
+        }
+
+        .icon-instagram {
+            fill: #E4405F;
+        }
+
+        .action-button:hover .icon-instagram {
+            fill: #E4405F;
+            opacity: 1;
+        }
+
+        .icon-facebook {
+            fill: #1877F2;
+        }
+
+        .action-button:hover .icon-facebook {
+            fill: #1877F2;
+            opacity: 1;
+        }
+
+        /* Focus states for accessibility */
+        .action-button:focus {
+            outline: none;
+            border-color: var(--color-warm-beige);
+            box-shadow: 
+                0 0 0 3px rgba(203, 184, 157, 0.2),
+                0 8px 32px rgba(203, 184, 157, 0.15);
+        }
+
+        /* Active state */
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 16px rgba(203, 184, 157, 0.2);
+        }
+
+        /* Footer */
+        .footer-section {
+            animation: fadeIn 1s ease-out 1.2s both;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .footer-info {
+            font-size: 14px;
+            color: var(--color-sage-green);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .footer-info p {
+            margin-bottom: 8px;
+        }
+
+        .footer-info a {
+            color: var(--color-warm-beige);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-info a:hover {
+            color: var(--color-soft-black);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 0 24px;
+            }
+
+            .main-content {
+                padding: 50px 0;
+            }
+
+            .logo-section {
+                margin-bottom: 35px;
+            }
+
+            .logo-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            .hero-section {
+                margin-bottom: 40px;
+            }
+
+            .action-section {
+                margin-bottom: 50px;
+                gap: 20px;
+            }
+
+            .action-button {
+                max-width: 300px;
+                padding: 18px 32px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 0 20px;
+            }
+
+            .main-content {
+                padding: 40px 0;
+            }
+
+            .logo-section {
+                margin-bottom: 30px;
+            }
+
+            .logo-container {
+                width: 90px;
+                height: 90px;
+            }
+
+            .hero-section {
+                margin-bottom: 35px;
+            }
+
+            .action-section {
+                margin-bottom: 40px;
+                gap: 18px;
+            }
+
+            .action-button {
+                max-width: 280px;
+                padding: 16px 28px;
+                font-size: 14px;
+            }
+
+            .icon {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        /* Smooth scrolling and transitions */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 44, 44, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-pure-white);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 120px rgba(44, 44, 44, 0.3);
+            transform: scale(0.9) translateY(40px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(203, 184, 157, 0.2);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--color-light-gray);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--color-soft-black);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .modal-subtitle {
+            font-size: 16px;
+            color: var(--color-sage-green);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--color-light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--color-soft-black);
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: var(--color-warm-beige);
+            color: var(--color-pure-white);
+            transform: scale(1.1);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--color-soft-black);
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--color-light-gray);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--color-soft-black);
+            background: var(--color-pure-white);
+            transition: all 0.3s ease;
+            font-family: var(--font-primary);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-warm-beige);
+            box-shadow: 0 0 0 4px rgba(203, 184, 157, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 18px 32px;
+            background: linear-gradient(135deg, var(--color-warm-beige), var(--color-sage-green));
+            color: var(--color-pure-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-sage-green), var(--color-warm-beige));
+            transition: left 0.4s ease;
+        }
+
+        .submit-button:hover::before {
+            left: 0;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(163, 163, 128, 0.4);
+        }
+
+        .submit-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner-form {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .submit-button.loading .submit-text {
+            opacity: 0;
+        }
+
+        .submit-button.loading .loading-spinner-form {
+            display: block;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #e8f5e8, #d4f1d4);
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #2e7d32;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .success-message h4 {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 24px;
+                margin: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Copyright footer responsive */
+        @media (max-width: 768px) {
+            .copyright-footer {
+                padding: 0 24px !important;
+            }
+            
+            .footer-section {
+                margin-bottom: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .copyright-footer {
+                padding: 0 20px !important;
+            }
+            
+            .footer-section {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Background Decoration -->
+        <div class="bg-decoration"></div>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <main class="main-content">
+                <!-- Logo Section -->
+                <section class="logo-section">
+                    <div class="logo-container">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Atelier Design Logo" class="logo-image">
+                    </div>
+                </section>
+
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <p class="hero-subtitle">Criamos ambientes únicos e funcionais, onde cada detalhe é pensado para refletir seu estilo de vida com sofisticação e harmonia.</p>
+                </section>
+
+                <!-- Action Buttons -->
+                <section class="action-section">
+                    <button class="action-button" onclick="openModal()">
+                        <svg class="icon icon-whatsapp" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                        <span>Conversar no WhatsApp</span>
+                    </button>
+
+                    <a href="https://instagram.com/atelierdesign" class="action-button" target="_blank" rel="noopener noreferrer">
+                        <svg class="icon icon-instagram" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <span>Seguir no Instagram</span>
+                    </a>
+
+                    <a href="https://facebook.com/atelierdesign" class="action-button" target="_blank" rel="noopener noreferrer">
+                        <svg class="icon icon-facebook" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span>Curtir no Facebook</span>
+                    </a>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Copyright Footer -->
+    <div style="background: var(--color-light-gray); padding: 16px 0; text-align: center; border-top: 1px solid rgba(203, 184, 157, 0.2);">
+        <div class="copyright-footer" style="max-width: 1400px; margin: 0 auto; padding: 0 40px;">
+            <p style="font-size: 13px; color: var(--color-sage-green); margin: 0;">
+                &copy; 2025 Atelier Design. Todos os direitos reservados.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            
+            <div class="modal-header">
+                <h3 class="modal-title">Vamos Planejar Seu Espaço</h3>
+                <p class="modal-subtitle">Conte-nos sobre seu projeto para oferecermos o melhor atendimento personalizado</p>
+            </div>
+
+            <form id="whatsappForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="nome">Seu Nome</label>
+                        <input type="text" id="nome" class="form-input" placeholder="Como podemos te chamar?" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="telefone">WhatsApp</label>
+                        <input type="tel" id="telefone" class="form-input" placeholder="(83) 99999-9999" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="ambiente">Qual ambiente você quer mobiliar?</label>
+                    <select id="ambiente" class="form-select" required>
+                        <option value="">Selecione o ambiente</option>
+                        <option value="Cozinha">Cozinha</option>
+                        <option value="Quarto Casal">Quarto do Casal</option>
+                        <option value="Quarto Solteiro">Quarto Solteiro</option>
+                        <option value="Quarto Infantil">Quarto Infantil</option>
+                        <option value="Sala de Estar">Sala de Estar</option>
+                        <option value="Home Office">Home Office</option>
+                        <option value="Banheiro">Banheiro</option>
+                        <option value="Área de Serviço">Área de Serviço</option>
+                        <option value="Closet">Closet</option>
+                        <option value="Vários Ambientes">Vários Ambientes</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="prazo">Prazo Desejado</label>
+                        <select id="prazo" class="form-select">
+                            <option value="">Quando pretende fazer?</option>
+                            <option value="Urgente (até 1 mês)">Urgente (até 1 mês)</option>
+                            <option value="Em breve (1-3 meses)">Em breve (1-3 meses)</option>
+                            <option value="Médio prazo (3-6 meses)">Médio prazo (3-6 meses)</option>
+                            <option value="Futuro (mais de 6 meses)">Futuro (mais de 6 meses)</option>
+                            <option value="Ainda estou pesquisando">Ainda estou pesquisando</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="orcamento">Orçamento Aproximado</label>
+                        <select id="orcamento" class="form-select">
+                            <option value="">Faixa de investimento</option>
+                            <option value="Até R$ 5.000">Até R$ 5.000</option>
+                            <option value="R$ 5.000 - R$ 10.000">R$ 5.000 - R$ 10.000</option>
+                            <option value="R$ 10.000 - R$ 20.000">R$ 10.000 - R$ 20.000</option>
+                            <option value="R$ 20.000 - R$ 30.000">R$ 20.000 - R$ 30.000</option>
+                            <option value="Acima de R$ 30.000">Acima de R$ 30.000</option>
+                            <option value="Preciso de orientação">Preciso de orientação</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="detalhes">Detalhes do seu projeto (opcional)</label>
+                    <textarea id="detalhes" class="form-textarea" placeholder="Conte-nos sobre suas necessidades, estilo preferido, medidas do ambiente..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    <span class="submit-text">Enviar para WhatsApp</span>
+                    <div class="loading-spinner-form"></div>
+                </button>
+
+                <div id="successMessage" class="success-message">
+                    <h4>✓ Formulário enviado com sucesso!</h4>
+                    <p>Redirecionando para o WhatsApp...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+            }, 1000);
+        });
+
+        // Modal functions
+        function openModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            document.getElementById('whatsappForm').reset();
+            document.getElementById('successMessage').classList.remove('show');
+            const submitButton = document.querySelector('.submit-button');
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Phone mask
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formattedValue = '';
+            
+            if (value.length > 0) {
+                formattedValue = '(' + value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                formattedValue += ') ' + value.substring(2, 7);
+            }
+            if (value.length > 7) {
+                formattedValue += '-' + value.substring(7, 11);
+            }
+            
+            e.target.value = formattedValue;
+        });
+
+        // Form validation
+        function isValidPhone(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            return cleanPhone.length >= 10;
+        }
+
+        // Form submission
+        document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.querySelector('.submit-button');
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+            
+            // Get form data
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const ambiente = document.getElementById('ambiente').value;
+            const prazo = document.getElementById('prazo').value;
+            const orcamento = document.getElementById('orcamento').value;
+            const detalhes = document.getElementById('detalhes').value.trim();
+            
+            // Validation
+            if (!nome || !telefone || !ambiente) {
+                alert('Por favor, preencha nome, telefone e ambiente desejado.');
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+                return;
+            }
+            
+            if (!isValidPhone(telefone)) {
+                alert('Por favor, digite um telefone válido.');
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+                return;
+            }
+            
+            // Build message
+            let message = `🏡 *Olá! Tenho interesse em móveis planejados*\n\n`;
+            message += `👤 *Nome:* ${nome}\n`;
+            message += `📱 *WhatsApp:* ${telefone}\n`;
+            message += `🏠 *Ambiente:* ${ambiente}\n`;
+            
+            if (prazo) {
+                message += `⏰ *Prazo:* ${prazo}\n`;
+            }
+            if (orcamento) {
+                message += `💰 *Orçamento:* ${orcamento}\n`;
+            }
+            if (detalhes) {
+                message += `📝 *Detalhes:* ${detalhes}\n`;
+            }
+            
+            message += `\n_Aguardo seu contato! 😊_`;
+            
+            // Process and redirect
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.add('show');
+                
+                setTimeout(() => {
+                    const whatsappNumber = '5583999999999'; // Replace with actual number
+                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                    
+                    // Open WhatsApp
+                    try {
+                        const newWindow = window.open(whatsappURL, '_blank');
+                        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                            window.location.href = whatsappURL;
+                        }
+                    } catch (error) {
+                        window.location.href = whatsappURL;
+                    }
+                    
+                    setTimeout(closeModal, 1000);
+                }, 1500);
+            }, 800);
+        });
+
+        // ESC key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Keyboard navigation enhancements
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+
+        // Performance optimization for animations
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        if (prefersReducedMotion.matches) {
+            document.documentElement.style.setProperty('--animation-duration', '0.01ms');
+        }
+    </script>
+</body>
+</html>
