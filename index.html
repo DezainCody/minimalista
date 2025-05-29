@@ -159,8 +159,8 @@
 
         .logo-container {
             display: inline-block;
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             overflow: hidden;
             background: var(--color-pure-white);
@@ -203,6 +203,27 @@
         .hero-section {
             margin-bottom: 50px;
             text-align: center;
+            position: relative;
+        }
+
+        /* Elegant divider line */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--color-border-accent), 
+                var(--color-warm-beige), 
+                var(--color-border-accent), 
+                transparent
+            );
+            opacity: 0.6;
+            animation: fadeIn 1s ease-out 1s both;
         }
 
         .hero-subtitle {
@@ -230,18 +251,18 @@
         .action-button {
             display: inline-flex;
             align-items: center;
-            gap: 16px;
-            padding: 20px 36px;
+            gap: 18px;
+            padding: 22px 40px;
             background: var(--color-pure-white);
             color: var(--color-soft-black);
             text-decoration: none;
             border-radius: 16px;
             font-weight: 400;
-            font-size: 15px;
+            font-size: 16px;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
-            max-width: 320px;
+            max-width: 340px;
             width: 100%;
             animation: slideInLeft 1s ease-out calc(0.7s + var(--delay, 0s)) both;
             cursor: pointer;
@@ -324,8 +345,8 @@
 
         /* Icon Styles - More minimalist */
         .icon {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             flex-shrink: 0;
             opacity: 0.8;
             transition: all 0.3s ease;
@@ -416,12 +437,16 @@
             }
 
             .logo-container {
-                width: 100px;
-                height: 100px;
+                width: 115px;
+                height: 115px;
             }
 
             .hero-section {
                 margin-bottom: 40px;
+            }
+
+            .hero-section::after {
+                width: 60px;
             }
 
             .action-section {
@@ -430,9 +455,9 @@
             }
 
             .action-button {
-                max-width: 300px;
-                padding: 18px 32px;
-                font-size: 15px;
+                max-width: 320px;
+                padding: 20px 36px;
+                font-size: 16px;
             }
         }
 
@@ -450,12 +475,16 @@
             }
 
             .logo-container {
-                width: 90px;
-                height: 90px;
+                width: 105px;
+                height: 105px;
             }
 
             .hero-section {
                 margin-bottom: 35px;
+            }
+
+            .hero-section::after {
+                width: 50px;
             }
 
             .action-section {
@@ -464,14 +493,14 @@
             }
 
             .action-button {
-                max-width: 280px;
-                padding: 16px 28px;
-                font-size: 14px;
+                max-width: 300px;
+                padding: 18px 32px;
+                font-size: 15px;
             }
 
             .icon {
-                width: 18px;
-                height: 18px;
+                width: 20px;
+                height: 20px;
             }
         }
 
